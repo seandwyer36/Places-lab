@@ -1,0 +1,361 @@
+/* ---------- Design tokens ---------- */
+:root {
+  --ink: #1f2a37;
+  --muted: #5b6776;
+  --paper: #f6f3ec;
+  --card: #ffffff;
+  --line: #e2ddd0;
+  --accent: #d1495b;
+  --accent-dark: #a8323f;
+  --teal: #1f6f78;
+  --shadow: 0 8px 24px rgba(31, 42, 55, 0.16);
+  --radius: 14px;
+  font-family: 'Avenir Next', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+}
+
+/* ---------- Page layout ---------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100vh;
+  height: 100dvh; /* accounts for mobile browser toolbars */
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 4vw, 2.1rem);
+  color: var(--teal);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.notice {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff3cd;
+  border: 1px solid #f0dc8c;
+  font-size: 0.9rem;
+}
+
+/* The map and (before Done is pressed) the list share the remaining height. */
+.content {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 12px;
+}
+
+.content-done {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font: inherit;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(31, 111, 120, 0.45);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--teal);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #17565d;
+}
+
+.btn-primary:disabled {
+  background: #9bb8bb;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--accent-dark);
+  border-color: var(--accent);
+}
+
+.btn-secondary:hover {
+  background: rgba(209, 73, 91, 0.1);
+}
+
+/* ---------- Map ---------- */
+.map-wrap {
+  position: relative;
+  isolation: isolate; /* keeps Leaflet's high z-index layers inside the map */
+  min-height: 260px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.content-done .map {
+  cursor: grab;
+}
+
+/* CSS-drawn map pin: a rotated rounded square with one sharp corner pointing down */
+.pin span {
+  display: block;
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.pin span::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.pin-pending span {
+  background: var(--teal);
+}
+
+.leaflet-marker-icon.pin {
+  cursor: pointer;
+}
+
+/* ---------- Place list ---------- */
+.place-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.place-list h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+.count {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 8px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.place-list ol {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0 0 0 1.3em;
+  overflow-y: auto;
+}
+
+.place-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.place-list li::marker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.place-info {
+  margin: 0;
+  font-size: 0.92rem;
+  /*long text is clipped to three lines so the list stays tidy */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.place-coords {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* ---------- Info box (popup) ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000; /* above everything Leaflet draws */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(31, 42, 55, 0.45);
+}
+
+.info-box {
+  width: min(460px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.info-box h2 {
+  margin: 0;
+  font-family: Georgia, 'Iowan Old Style', serif;
+  font-size: 1.3rem;
+  color: var(--teal);
+}
+
+.info-subtitle {
+  margin: 2px 0 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.info-input {
+  display: block;
+  width: 100%;
+  min-height: 110px;
+  padding: 10px 12px;
+  font: inherit;
+  color: inherit;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  resize: vertical;
+}
+
+.info-input:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.char-count {
+  margin: 4px 0 0;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* Saved text can be long or contain unbroken strings, so it wraps and scrolls. */
+.info-text {
+  margin: 0;
+  max-height: 40vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.info-hint {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.info-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---------- Phones and small tablets ---------- */
+@media (max-width: 720px) {
+  .app {
+    padding: 10px;
+  }
+
+  .content {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 34%);
+  }
+
+  .content-done {
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .hint {
+    font-size: 0.85rem;
+  }
+}
